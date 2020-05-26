@@ -15,6 +15,7 @@ class WalkComponnet : GKComponent{
 
 	var xAxis : Double = 0.0
 	var yAxis : Double = 0.0
+	var sprint = false
 
 	init(walk: Double, run: Double){
 
@@ -32,7 +33,8 @@ class WalkComponnet : GKComponent{
 	}
 
 	override func update(deltaTime seconds: TimeInterval) {
-		if( xAxis > 0.5 || yAxis > 0.5){
+		
+		if !(self.sprint){
 			walk(seconds: seconds)
 		}
 		else {
@@ -55,8 +57,8 @@ class WalkComponnet : GKComponent{
 		guard let entity = self.entity else { return }
 		guard let body = entity.component(ofType: BodyComponent.self) else { return }
 
-		body.node.position.x += CGFloat(seconds * walkVelocity * xAxis)
-		body.node.position.y += CGFloat(seconds * walkVelocity * yAxis)
+		body.node.position.x += CGFloat(seconds * runVelocity * xAxis)
+		body.node.position.y += CGFloat(seconds * runVelocity * yAxis)
 
 	}
 	

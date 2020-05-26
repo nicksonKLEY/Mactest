@@ -15,7 +15,7 @@ class PlayerEntity : GKEntity{
 		super.init()
 
 		self.addComponent(BodyComponent(scene: scene, size: CGSize(width: 100, height: 100)))
-		self.addComponent(WalkComponnet(walk: 50, run: 80))
+		self.addComponent(WalkComponnet(walk: 200, run: 500))
 		self.addComponent(KeyboardControlerComponent())
 
 	}

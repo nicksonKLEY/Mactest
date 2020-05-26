@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import IOKit
 
 class GameScene: SKScene {
     
@@ -27,7 +28,31 @@ class GameScene: SKScene {
 		super.didMove(to: view)
 
 		entities.append(PlayerEntity(scene: self))
+		self.isUserInteractionEnabled = true
 		
+	}
+
+	override func keyDown(with event: NSEvent) {
+
+		for entity in self.entities{
+
+			guard let keyboardControler = entity.component(ofType: KeyboardControlerComponent.self) else { return }
+
+			keyboardControler.node.keyDown(with: event)
+
+		}
+
+	}
+
+	override func keyUp(with event: NSEvent) {
+
+		for entity in self.entities{
+			guard let keyboardControler = entity.component(ofType: KeyboardControlerComponent.self) else { return }
+
+			keyboardControler.node.keyUp(with: event)
+
+		}
+
 	}
     
     override func update(_ currentTime: TimeInterval) {

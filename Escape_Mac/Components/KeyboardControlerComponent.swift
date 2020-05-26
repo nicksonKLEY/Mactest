@@ -13,10 +13,8 @@ class KeyboardControlerComponent : GKSKNodeComponent{
 	class Keyboard : SKNode{
 
 		override init() {
-			super.init()
 
-			self.isUserInteractionEnabled = true
-			self.zPosition = 10
+			super.init()
 
 		}
 		
@@ -26,93 +24,72 @@ class KeyboardControlerComponent : GKSKNodeComponent{
 		
 		var xAxis = 0.0
 		var yAxis = 0.0
+		var sprint = false
+		var keysPressed : Set = Set<UInt16>()
 
 		override func keyUp(with event: NSEvent) {
 
-			switch event.keyCode {
-				case 13:
-				//UP
-					if(event.modifierFlags.contains(.shift)){
+			self.keysPressed.remove(event.keyCode)
 
-						self.xAxis -= 1
+			xAxis = 0
+			yAxis = 0
 
-					}
-					else{
+			self.keysPressed.forEach { (keyCode) in
+				if keyCode == 13{
 
-						self.xAxis -= 0.5
+					yAxis = 0.5
 
-					}
-				case 1:
-				//DOWN
-					if(event.modifierFlags.contains(.shift)){
+				}
+				else if keyCode == 1{
 
-						self.xAxis -= -1
+					yAxis = -0.5
 
-					}
-					else{
+				}
+				else if keyCode == 0{
 
-						self.xAxis -= -0.5
+					xAxis = -0.5
 
-					}
-				case 0:
-				//LEFT
-					if(event.modifierFlags.contains(.shift)){
+				}
+				else if keyCode == 2{
 
-						self.yAxis -= -1
+					xAxis = 0.5
 
-					}
-					else{
-
-						self.yAxis -= -0.5
-
-					}
-				case 2:
-				//RIGTH
-					if(event.modifierFlags.contains(.shift)){
-
-						self.yAxis -= 1
-
-					}
-					else{
-
-						self.yAxis -= 0.5
-
-					}
-				default:
-				break
+				}
 			}
 
 		}
 
 		override func keyDown(with event: NSEvent) {
 
-			print("apertou")
-
+			self.keysPressed.insert(event.keyCode)
 
 			switch event.keyCode {
 				case 13:
 				//UP
-					self.xAxis += 0.5
+					self.yAxis = 0.5
 				case 1:
 				//DOWN
-					self.xAxis += -0.5
+					self.yAxis = -0.5
 				case 0:
 				//LEFT
-					self.yAxis += -0.5
+					self.xAxis = -0.5
 				case 2:
 				//RIGTH
-					self.yAxis += 0.5
+					self.xAxis = 0.5
 				default:
-				break
+					print(event.keyCode)
+					break
 			}
 
-
 			if(event.modifierFlags.contains(.shift)){
-				xAxis *= 2
-				yAxis *= 2
+				self.sprint = true
+			}
+			else{
+				self.sprint = false
 			}
 
 		}
+
 	}
 
 	override func didAddToEntity() {
@@ -148,6 +125,7 @@ class KeyboardControlerComponent : GKSKNodeComponent{
 
 		walkComponent.xAxis = keyboard.xAxis
 		walkComponent.yAxis = keyboard.yAxis
+		walkComponent.sprint = keyboard.sprint
 
 
 	}
